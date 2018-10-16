@@ -44,4 +44,3 @@ module PrettyPrinter (printTerm) where
   printTerm  :: Term -> Doc
   printTerm t = pp 0 (filter (\v -> not $ elem v (fv t)) vars) t
 
-

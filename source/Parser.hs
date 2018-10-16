@@ -6,6 +6,8 @@ module Parser where
   import Text.Parsec.Language
   import Control.Applicative hiding ((<|>))
 
+  import Data.List
+
   import Common
   import Untyped
 
@@ -15,7 +17,10 @@ module Parser where
 ----------------------------------------------
 
   num :: Integer -> LamTerm
-  num n =  undefined
+  num n =  let genSucc 0 = LVar "z"
+               genSucc n = App (LVar "s") $ genSucc (n-1)
+           in 
+               Abs "s" $ Abs "z" $ genSucc n
 
 -------------------------------------------------
 -- Parser de Lambda Cálculo (Gramatica Extendida) 
