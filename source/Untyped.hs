@@ -44,16 +44,18 @@ subst (Lam t)      t' i = Lam $ subst t (shift t' 1 0) (i+1)
 
 eval :: NameEnv Term -> Term -> Term
 
-eval nvs (Free k)    = case lookup k nvs of
-                          Just m  -> eval nvs m
-                          Nothing -> Free k -- error $ "unregistered variable " ++ k
-eval nvs (Bound k)   = Bound k
+eval nvs (Free k)          = case lookup k nvs of
+                                Just m  -> eval nvs m
+                                Nothing -> Free k -- error $ "unregistered variable " ++ k
+eval nvs (Bound k)         = Bound k
 -- E-ABS
-eval nvs (Lam t)     = Lam $ eval nvs t
+eval nvs (Lam t)           = Lam $ eval nvs t
 -- E-AppAbs
-eval nvs ((Lam t1) :@: t2)    = eval nvs $ shift (subst t1 (shift t2 0 1) 0) 0 (-1) 
+eval nvs ((Lam t1) :@: t2) = eval nvs $ shift (subst t1 (shift t2 0 1) 0) 0 (-1) 
+-- 
+eval nvs (t1 :@: t2)       = case eval nvs t1 of
+	                            Lam t3 -> eval nvs $ Lam t3 :@: t2
+                                t3     -> t3 :@: eval nvs t2
 
----------
 
-eval nvs ((t1 :@: t2) :@: t3) = ?????
                                 

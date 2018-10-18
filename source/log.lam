@@ -1,0 +1,21 @@
+def one = suc zero
+def dos = suc one
+
+def resta = \n m. m (pred) n
+
+def menorIgual = \n m. (is0 (resta n m))  
+
+def is1 = \n. is0 n
+				 (false)
+				 (is0 (pred n))
+
+def log2Aux = Y (\f n. is1 n
+                   (pair zero dos)
+                   (	(	\x. menorIgual (snd x) n
+							(pair (suc (fst x)) (add (snd x) (snd x)))
+							(x)
+						) (f (pred n))
+                   )
+                )
+               
+def log2 = \x. fst (log2Aux x)
