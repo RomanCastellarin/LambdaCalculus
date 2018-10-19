@@ -1,21 +1,17 @@
 def one = suc zero
-def dos = suc one
+def two = suc one
 
-def resta = \n m. m (pred) n
+-- not b = if b then false else true
+def not = \b. b false true
 
-def menorIgual = \n m. (is0 (resta n m))  
+-- resta x y = foldn y pred x
+def resta = \x y. y pred x
 
-def is1 = \n. is0 n
-				 (false)
-				 (is0 (pred n))
+-- menor x y = not (is0 (resta y x))
+def menor = \x y. not (is0 (resta y x))
 
-def log2Aux = Y (\f n. is1 n
-                   (pair zero dos)
-                   (	(	\x. menorIgual (snd x) n
-							(pair (suc (fst x)) (add (snd x) (snd x)))
-							(x)
-						) (f (pred n))
-                   )
-                )
-               
-def log2 = \x. fst (log2Aux x)
+-- div x y = if (menor x y) then 0 else (div (resta x y) y) + 1
+def div = Y (\f x y. (menor x y) zero (suc (f (resta x y) y)))
+
+-- log2 n = if (is0 (n-1)) then 0 else (log2 (div n 2)) + 1
+def log2 = Y (\f n. (is0 (pred n)) zero (suc (f (div n two))))
